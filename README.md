@@ -3,6 +3,9 @@
 
 ## Team:
 Chris Kane-Pardy
+
 Kamal Smith
+
 Henry Sanders
+
 Wallace Mckenzie
