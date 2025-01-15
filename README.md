@@ -9,3 +9,6 @@ Kamal Smith
 Henry Sanders
 
 Wallace Mckenzie
+
+# pyFiles:
+### Contains all .py files used throughout the testing and development of our product
