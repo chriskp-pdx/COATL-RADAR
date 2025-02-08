@@ -24,10 +24,10 @@ sensor_config.num_points = 35
 sensor_config.sweeps_per_frame = 1
 #HWAAS to 25 for better SNR 
 sensor_config.hwaas = 25
-#Set to Profile 1
-sensor_config.profile = et.a121.Profile.PROFILE_1
+#Set to Profile 1 for close distance measurement accuracy
+sensor_config.profile = et.a121.Profile.PROFILE_1 #Profile 1, DO NOT CHANGE
 #PRF highest since our distance is short
-sensor_config.prf = 19.5e6 #MHz
+sensor_config.prf = 19.5e6 #19.5 MHz, DO NOT CHANGE
 #Confirm Sensor Config
 client.setup_session(sensor_config)
 
@@ -38,10 +38,11 @@ client.start_session()
 data = client.get_next()
 
 #Extract amplitude and corresponding distances
-distances = [sensor_config.start_point * 2.5 + i * sensor_config.step_length * 2.5 for i in range(sensor_config.num_points)]
+distances = [sensor_config.start_point * 2.5 + i * sensor_config.step_length * 2.5 for i in range(sensor_config.num_points)] #Correctly identify distances
 amplitudes = data.frame[0].tolist()  # Extract amplitude values
+#combinedamplitudes = (amplitudes[0]^2 + amplitudes[1]^2)^(-2) #THIS IS CURRENTLY UNTESTED BUT CAN BE USED FOR ACCURACY COMPARISON w/ exptool
 
-#Print labeled amplitude and distance values
+#Print labeled amplitude and distance values in tabulated format
 print("Distance (mm)\tAmplitude")
 for d, a in zip(distances, amplitudes):
     print(f"{d:.2f}\t{a:.2f}")
