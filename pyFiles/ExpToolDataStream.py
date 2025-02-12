@@ -14,12 +14,12 @@ sensor_id = 1
 
 #Setup Base Sensor Config
 sensor_config = a121.SensorConfig()
-#Alter step length, multiply by 2.5mm for actual distance
-sensor_config.step_length = 4
+#Alter step length, multiply by 2.5mm for actual distance (must be a divisor or multiple of 24)
+sensor_config.step_length = 1 #2.5mm step size
 #Start Point = 2.5mm * start point
-sensor_config.start_point = 0
+sensor_config.start_point = 15 #37.5mm start
 #Total Distance = (num_point * step length * 2.5mm) from start point
-sensor_config.num_points = 35
+sensor_config.num_points = 51 #165mm end
 #SpF set to 1 for static objects
 sensor_config.sweeps_per_frame = 1
 #HWAAS to 25 for better SNR 
