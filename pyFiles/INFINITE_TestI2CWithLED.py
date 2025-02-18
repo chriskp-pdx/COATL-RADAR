@@ -16,23 +16,34 @@ import microcontroller
 import digitalio
 import time
 import board
+from adafruit_bus_device.i2c_device import I2CDevice
 
 # I have removed this code and opted to just use the onboard RED LED on board
 # Initialize the LED on a GPIO pin (change GPIO5 to your chosen pin)
 # led = digitalio.DigitalInOut(microcontroller.pin.GPIO5)
 # led.direction = digitalio.Direction.OUTPUT
 
+#This is the address that was displayed when using board.SCL and board.SDA
+#XE125_I2C_ADDR = 0x36
+
 # Setting up the small red LED as an output. This is to help indicate we have an I2C connection
 LED = digitalio.DigitalInOut(board.LED)
 LED.direction = digitalio.Direction.OUTPUT
 
 # Initialize I2C on GPIO3 (SCL) and GPIO4 (SDA)
+# When searching online, I found more uses of i2c = busio.I2C(board.SCL, board.SDA), when testing this I always 
+# got an address back even when nothing was plugged in, so I switched to a lower level control of microcontroller
 i2c = busio.I2C(microcontroller.pin.GPIO3, microcontroller.pin.GPIO4)
+# i2c = busio.I2C(board.SCL, board.SDA)
 
 while True:
 # Attempts to grab I2C lock, Returns true on success (type bool)
     while not i2c.try_lock():
         pass
+
+    print("About to create XE125 Instance")   
+    #Creating an instance for XE125
+    #xe125 = I2CDevice(i2c, XE125_I2C_ADDR)
 
     try:
     #LED.value = True
