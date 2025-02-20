@@ -21,7 +21,7 @@ REG_VERSION = 0x0000
 
 # Initialize I²C bus
 #i2c = busio.I2C(SCL = board.SCL, SDA = board.SDA)
-i2c = busio.I2C(microcontroller.pin.GPIO3, microcontroller.pin.GPIO4)
+i2c = busio.I2C(microcontroller.pin.GPIO4, microcontroller.pin.GPIO3)
 #i2c = busio.I2C(board.SCL, board.SDA)
 MCU = digitalio.DigitalInOut(board.D11)
 MCU.direction = digitalio.Direction.INPUT
