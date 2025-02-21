@@ -26,6 +26,8 @@ i2c = busio.I2C(microcontroller.pin.GPIO4, microcontroller.pin.GPIO3)
 MCU = digitalio.DigitalInOut(board.D11)
 MCU.direction = digitalio.Direction.INPUT
 
+# CHECK FOR PULL UP
+
 WakeUp = digitalio.DigitalInOut(board.D12)
 WakeUp.direction = digitalio.Direction.OUTPUT
 WakeUp.value = True
