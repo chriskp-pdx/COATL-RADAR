@@ -14,23 +14,24 @@ LED.direction = digitalio.Direction.OUTPUT
 #indicator.direction = digitalio.Direction.OUTPUT
 
 # XE125 sensor 7-bit I2C address (default if I2C_ADDR pin is not connected)
-XE125_ADDR = 0x52
+XE125_ADDR = 0x60
 
 # A known register to read (Version register at 0x0000)
 REG_VERSION = 0x0000
 
 # Initialize I²C bus
 #i2c = busio.I2C(SCL = board.SCL, SDA = board.SDA)
-i2c = busio.I2C(microcontroller.pin.GPIO4, microcontroller.pin.GPIO3)
+i2c = board.STEMMA_I2C()
+#i2c = busio.I2C(microcontroller.pin.GPIO4, microcontroller.pin.GPIO3)
 #i2c = busio.I2C(board.SCL, board.SDA)
-MCU = digitalio.DigitalInOut(board.D11)
-MCU.direction = digitalio.Direction.INPUT
+#MCU = digitalio.DigitalInOut(board.D11)
+#MCU.direction = digitalio.Direction.INPUT
 
 # CHECK FOR PULL UP
 
-WakeUp = digitalio.DigitalInOut(board.D12)
-WakeUp.direction = digitalio.Direction.OUTPUT
-WakeUp.value = True
+#WakeUp = digitalio.DigitalInOut(board.D12)
+#WakeUp.direction = digitalio.Direction.OUTPUT
+#WakeUp.value = True
 
 time.sleep(3)
 
