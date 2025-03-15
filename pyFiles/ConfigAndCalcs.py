@@ -40,16 +40,17 @@ def process_xm125_data(amplitudes, distances):
     return epsilon_real, epsilon_imag
 
 # Setup sensor client
-client = a121.Client.open(serial_port="COM5")
+client = a121.Client.open(serial_port="COM8")
 sensor_id = 1
 sensor_config = a121.SensorConfig()
 sensor_config.step_length = 1
-sensor_config.start_point = 15
-sensor_config.num_points = 51
+sensor_config.start_point = 23
+sensor_config.num_points = 50
 sensor_config.sweeps_per_frame = 1
 sensor_config.hwaas = 25
 sensor_config.profile = et.a121.Profile.PROFILE_1
 sensor_config.prf = 19.5e6
+sensor_config.receiver_gain = 12
 
 # Configure and start session
 client.setup_session(sensor_config)
