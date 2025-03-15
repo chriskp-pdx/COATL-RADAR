@@ -10,13 +10,8 @@ def process_xm125_data(calamp, beanamp, caldist, beandist):
     c = 3e8  # Speed of light (m/s)
     f = 60e9  # Frequency of XM125 (Hz)
     w = 2 * np.pi * f  # Angular frequency
+    epsilonnot = 8.854 * 10 ** (-12) # Epsilon Not
     
-    """
-    Compute permittivity (epsilon' and epsilon'') from amplitude data.
-    :param amplitudes: Measured amplitude values from the radar.
-    :param distances: Corresponding distances in meters.
-    :return: epsilon' and epsilon''
-    """
     amp_cal = np.max(np.array(calamp))
     amp_bean = np.max(np.array(beanamp))
     
@@ -38,10 +33,10 @@ def process_xm125_data(calamp, beanamp, caldist, beandist):
     beta =  (phibean - phical)/ d  # Phase constant
     
     # Compute permittivity
-    epsilon_real = (beta * c / w) ** 2
-    epsilon_imag = (2 * alpha * c) / w
+    epsilon_real = ((beta * c / w) ** 2) * (1 / epsilonnot)
+    epsilon_imag = (2 * alpha * c) / (w * epsilonnot)
     
-    return epsilon_real, epsilon_imag
+    return epsilon_real, epsilon_imag, beta, alpha
 
 # Setup sensor client
 client = a121.Client.open(serial_port="COM8")
@@ -86,7 +81,7 @@ Beanamplitudes = data.frame[0].tolist()
 client.stop_session()
 
 # Compute permittivity
-epsilon_real, epsilon_imag = process_xm125_data(Calamplitudes, Beanamplitudes, Caldistances, Beandistances)
+epsilon_real, epsilon_imag, beta, alpha = process_xm125_data(Calamplitudes, Beanamplitudes, Caldistances, Beandistances)
 epsilon = np.sqrt((epsilon_real**2)+(epsilon_imag**2))
 epsilon = np.real(epsilon)
-print("The epsilon value is: ", epsilon)
+print("The epsilon value is: ", epsilon, " Beta is: ", beta, "Alpha is: ", alpha)
