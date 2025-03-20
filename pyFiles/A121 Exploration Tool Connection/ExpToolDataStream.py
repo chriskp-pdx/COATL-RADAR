@@ -3,10 +3,11 @@
 
 import acconeer.exptool as et
 from acconeer.exptool import a121
+import numpy as np
 
 #Connecting COM port to exptool via Python
 client = a121.Client.open(
-    serial_port="COM5" #Use Local Port to Your PC
+    serial_port="COM8" #Use Local Port to Your PC
 )
 
 #Assign a sensor ID from a board or module or evaluation kit (EVK)
@@ -40,12 +41,14 @@ data = client.get_next()
 #Extract amplitude and corresponding distances
 distances = [sensor_config.start_point * 2.5 + i * sensor_config.step_length * 2.5 for i in range(sensor_config.num_points)] #Correctly identify distances
 amplitudes = data.frame[0].tolist()  # Extract amplitude values
+realamplitudes = np.real(amplitudes)
+imaginaryamplitudes = np.imag(amplitudes)
 #combinedamplitudes = (amplitudes[0]^2 + amplitudes[1]^2)^(-2) #THIS IS CURRENTLY UNTESTED BUT CAN BE USED FOR ACCURACY COMPARISON w/ exptool
 
 #Print labeled amplitude and distance values in tabulated format
 print("Distance (mm)\tAmplitude")
-for d, a in zip(distances, amplitudes):
-    print(f"{d:.2f}\t{a:.2f}")
+for d, a, ra, ia in zip(distances, amplitudes, realamplitudes, imaginaryamplitudes):
+    print(f"{d:.2f}\t{a:.2f}\t{ra:.2f}\t{ia:.2f}")
 
 #Stop session and disconnect
 client.stop_session()
