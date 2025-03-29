@@ -12,51 +12,37 @@ def process_xm125_data(calamp, beanamp, caldist, beandist):
     epsilonnot = 8.854 * 10 ** (-12)  # Permittivity of free space
     
     # Get max amplitude and corresponding distance
-    max_index = np.argmax(calamp)
-    d = caldist[max_index]
+    max_index = np.argmax(np.abs(calamp))
+    d = max(caldist[max_index], 1e-6) * 10 ** (-3)  # Prevent division by zero
 
-    amp_cal = np.max(np.array(calamp))
-    amp_bean = np.max(np.array(beanamp))
+    amp_cal = np.max(np.abs(calamp))
+    amp_bean = np.max(np.abs(beanamp))
     
-    # Debugging prints
-    print(f"Max calibration amplitude: {amp_cal}")
-    print(f"Max bean amplitude: {amp_bean}")
-    print(f"Distance at max amplitude: {d}")
-
     # Compute attenuation
-    if amp_bean == 0 or amp_cal == 0:  # Prevent log(0) issues
-        print("Error: Zero amplitude detected, check signal quality.")
-        return None, None, None, None
-
+    amp_bean = max(amp_bean, 1e-10)  # Prevent log(0) issues
     alpha = np.log(amp_cal / amp_bean) / d  # Attenuation constant
-    print(f"Computed alpha (attenuation constant): {alpha}")
 
-    # Compute phase shift more robustly
-    phical = np.angle(amp_cal)
-    phibean = np.angle(amp_bean)
+    # Compute phase shift robustly
+    phical = np.angle(calamp[max_index])
+    phibean = np.angle(beanamp[max_index])
     beta = (phibean - phical) / d  # Phase constant
-    print(f"Computed beta (phase constant): {beta}")
 
     # Compute permittivity
     epsilon_real = ((beta * c / w) ** 2) * (1 / epsilonnot)
     epsilon_imag = (2 * alpha * c) / (w * epsilonnot)
 
-    # Debugging prints
-    print(f"Epsilon real part: {epsilon_real}")
-    print(f"Epsilon imaginary part: {epsilon_imag}")
-
-    return epsilon_real, epsilon_imag, beta, alpha
+    return epsilon_real, epsilon_imag, beta, alpha, d
 
 # Function to collect and average multiple scans
 def collect_averaged_scan(client, sensor_config, num_scans=10, delay=0.25):
-    total_amplitudes = np.zeros(sensor_config.num_points)
+    total_amplitudes = np.zeros(sensor_config.num_points, dtype=np.complex128)
 
     for _ in range(num_scans):
         client.start_session()
         data = client.get_next()
         client.stop_session()
         
-        amplitudes = np.array(data.frame[0].tolist())
+        amplitudes = np.array(data.frame[0], dtype=np.complex128)
         total_amplitudes += amplitudes
         
         time.sleep(delay)  # Wait between scans
@@ -93,7 +79,7 @@ client.setup_session(sensor_config)
 Beanamplitudes, Beandistances = collect_averaged_scan(client, sensor_config)
 
 # Compute permittivity
-epsilon_real, epsilon_imag, beta, alpha = process_xm125_data(Calamplitudes, Beanamplitudes, Caldistances, Beandistances)
+epsilon_real, epsilon_imag, beta, alpha, distance = process_xm125_data(Calamplitudes, Beanamplitudes, Caldistances, Beandistances)
 
 if epsilon_real is not None:
     epsilon = np.sqrt((epsilon_real**2) + (epsilon_imag**2))
@@ -101,5 +87,6 @@ if epsilon_real is not None:
     print("The computed epsilon value is:", epsilon)
     print("Beta is:", beta)
     print("Alpha is:", alpha)
+    print("Distance at max amplitude is:", distance)
 else:
     print("Error in computation, check debug prints above.")

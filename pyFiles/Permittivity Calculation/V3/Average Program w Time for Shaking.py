@@ -11,7 +11,7 @@ def process_xm125_data(calamp, beanamp, caldist, beandist):
     epsilonnot = 8.854 * 10 ** (-12)  # Permittivity of free space
     
     max_index = np.argmax(calamp)
-    d = caldist[max_index]
+    d = 0.0125
 
     amp_cal = np.max(np.array(calamp))
     amp_bean = np.max(np.array(beanamp))
@@ -42,7 +42,7 @@ def process_xm125_data(calamp, beanamp, caldist, beandist):
 
 # Function to collect and average multiple scans
 def collect_averaged_scan(client, sensor_config, num_scans=10, delay=0.25):
-    total_amplitudes = np.zeros(sensor_config.num_points)
+    total_amplitudes = np.zeros(sensor_config.num_points, dtype=np.complex128)
 
     for _ in range(num_scans):
         client.start_session()
