@@ -26,14 +26,10 @@ def MultiScanAverage(client, sensor_config, num_scans=10, delay=0.25):
 
         amplitudes = np.array(data.frame[0].tolist())
         total_amplitudes += amplitudes
-
-        # Print raw data for debugging
-        print(f"Raw amplitudes (first scan): {amplitudes}")
         
         time.sleep(delay)
 
     averaged_amplitudes = total_amplitudes / num_scans
-    print(f"Averaged amplitudes: {averaged_amplitudes}")
     
     return averaged_amplitudes
 
@@ -55,7 +51,7 @@ sensor_config.receiver_gain = 23
 #Collect Calibration Scan (10 Empty Container Scans Averaged)
 client.setup_session(sensor_config)
 print("Starting calibration scan...")
-CalibrationAmplitudes = MultiScanAverage(client, sensor_config)
+CalibrationAmplitudes = np.abs(MultiScanAverage(client, sensor_config))
 print("Calibration scan complete.")
 
 #Find the Maximum Calibration Amplitude
@@ -81,8 +77,6 @@ for i in range(ScanGroups):
     #Require User Input Before Moving to the Next Group
     if i < ScanGroups - 1:
         input("Press Enter to continue to the next scan group...")
-        
-client.stop_session()
 
 #Take Final Average of the Amplitude Scans
 BeanAmplitudes = BeanAmplitudeSum / ScanGroups
@@ -93,3 +87,6 @@ BeanMaxAmplitude = BeanAmplitudes[BeanMaxIndex]
 
 print(f"Average Maximum Calibration Amplitude: {CalibrationMaxAmplitude}")
 print(f"Average Maximum Bean Amplitude: {BeanMaxAmplitude}")
+
+#Close the Client Session
+client.close()
