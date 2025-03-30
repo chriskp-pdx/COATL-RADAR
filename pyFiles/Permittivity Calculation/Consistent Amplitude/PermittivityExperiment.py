@@ -15,6 +15,15 @@ f = 60 * (10 ** 9)  # Frequency of XM125 (60 GHz)
 w = 2 * np.pi * f  # Angular frequency
 d = 0.0125  # Distance (in meters)
 
+def CalculatePermittivity(CalibratedAmp, CalibratedPhase, BeanAmp, BeanPhase):
+    #This is possibly necessary if we're getting Gamma Values over 1 and need to normalize them: GammaMagnitude = 10 * np.log10(BeanAmp) - 10 * np.log10(CalibratedAmp)
+    GammaMagnitude = BeanAmp / CalibratedAmp
+    GammaPhase = BeanPhase - CalibratedPhase
+    Gamma = GammaMagnitude * np.exp(1j * GammaPhase)
+    #This is possibly necessary, will require testing: Gamma = np.clip(Gamma, -1, 1)
+    EpsilonR = ((1 + Gamma) / (1 - Gamma)) ** 2
+    return EpsilonR
+
 # Function to collect and average multiple scans
 def MultiScanAverage(client, sensor_config, Scans, Delay=0.25):
     total_amplitudes = np.zeros(sensor_config.num_points, dtype=np.complex128)
@@ -51,27 +60,27 @@ sensor_config.receiver_gain = 23
 #Collect Calibration Scan (10 Empty Container Scans Averaged)
 client.setup_session(sensor_config)
 print("Starting calibration scan...")
-CalibrationAmplitudes = np.abs(MultiScanAverage(client, sensor_config, Scans = 50))
+CalibrationAmplitudes = MultiScanAverage(client, sensor_config, Scans = 50)
 print("Calibration scan complete.")
 
-#Find the Maximum Calibration Amplitude
+#Find the Maximum Calibration Amplitude and Phase
 CalibrationMaxIndex = np.argmax(CalibrationAmplitudes)
-CalibrationMaxAmplitude = CalibrationAmplitudes[CalibrationMaxIndex]
+CalibrationMaxAmplitude = np.abs(CalibrationAmplitudes[CalibrationMaxIndex])
+CalibrationMaxPhase = np.angle(CalibrationAmplitudes[CalibrationMaxIndex])
 
 #Wait for User to Input the Beans and Proceed
 input("Press Enter to proceed to actual scans...")
 
 #Collect 5 groups of bean scans, each averaging 10 scans
 ScanGroups = 5
-BeanAmplitudes = np.zeros(sensor_config.num_points)
-BeanAmplitudeSum = np.zeros(sensor_config.num_points)
+BeanAmplitudeSum = np.zeros(sensor_config.num_points, dtype=np.complex128)
 
 for i in range(ScanGroups):
     print(f"Starting bean scan group {i+1}/{ScanGroups}...")
     
     client.setup_session(sensor_config)
-    BeanAmplitudes = np.abs(MultiScanAverage(client, sensor_config, Scans = 10))
-    BeanAmplitudeSum += BeanAmplitudes
+    BeanData = MultiScanAverage(client, sensor_config, Scans = 10)
+    BeanAmplitudeSum += BeanData
     print(f"Bean scan group {i+1} complete.")
 
     #Require User Input Before Moving to the Next Group
@@ -81,12 +90,19 @@ for i in range(ScanGroups):
 #Take Final Average of the Amplitude Scans
 BeanAmplitudes = BeanAmplitudeSum / ScanGroups
 
-#Find the Maximum Average Bean Amplitude
+#Find the Maximum Average Bean Amplitude and Phase
 BeanMaxIndex = np.argmax(BeanAmplitudes)
-BeanMaxAmplitude = BeanAmplitudes[BeanMaxIndex]
+BeanMaxAmplitude = np.abs(BeanAmplitudes[BeanMaxIndex])
+BeanMaxPhase = np.angle(BeanAmplitudes[BeanMaxIndex])
 
 print(f"Average Maximum Calibration Amplitude: {CalibrationMaxAmplitude}")
+print(f"Average Maximum Calibration Phase: {CalibrationMaxPhase}")
 print(f"Average Maximum Bean Amplitude: {BeanMaxAmplitude}")
+print(f"Average Maximum Bean Phase: {BeanMaxPhase}")
+
+#Calculate Dielectric Constant
+DielectricConstant = np.abs(CalculatePermittivity(CalibrationMaxAmplitude, CalibrationMaxPhase, BeanMaxAmplitude, BeanMaxPhase))
+print(f"Relative Permittivity: {DielectricConstant}")
 
 #Close the Client Session
 client.close()
