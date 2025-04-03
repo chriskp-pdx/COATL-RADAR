@@ -62,7 +62,7 @@ CalibrationMaxAmplitude = CalibrationAmplitudes[CalibrationMaxIndex]
 input("Press Enter to proceed to actual scans...")
 
 #Collect 5 groups of bean scans, each averaging 10 scans
-ScanGroups = 5
+ScanGroups = 10
 BeanAmplitudes = np.zeros(sensor_config.num_points)
 BeanAmplitudeSum = np.zeros(sensor_config.num_points)
 
@@ -70,7 +70,7 @@ for i in range(ScanGroups):
     print(f"Starting bean scan group {i+1}/{ScanGroups}...")
     
     client.setup_session(sensor_config)
-    BeanAmplitudes = np.abs(MultiScanAverage(client, sensor_config, Scans = 10))
+    BeanAmplitudes = np.abs(MultiScanAverage(client, sensor_config, Scans = 50))
     BeanAmplitudeSum += BeanAmplitudes
     print(f"Bean scan group {i+1} complete.")
 
