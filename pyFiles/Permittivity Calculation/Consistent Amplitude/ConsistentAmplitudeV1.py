@@ -46,7 +46,7 @@ sensor_config.sweeps_per_frame = 1
 sensor_config.hwaas = 60
 sensor_config.profile = et.a121.Profile.PROFILE_1
 sensor_config.prf = 19.5e6
-sensor_config.receiver_gain = 23
+sensor_config.receiver_gain = 19
 
 #Collect Calibration Scan (10 Empty Container Scans Averaged)
 client.setup_session(sensor_config)
