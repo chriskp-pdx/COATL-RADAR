@@ -37,12 +37,13 @@ def MultiScanAverage(client, sensor_config, Scans, Delay=0.25):
 def NormalizeAmplitude(complex_amplitude):
     magnitude = np.abs(complex_amplitude)  # Get magnitude
     phase = np.angle(complex_amplitude)    # Get phase (radians)
+    phase = np.unwrap(phase)
     normalized_value = magnitude * np.cos(phase)  # Normalize using cosine weighting
     return normalized_value
 
 #Device Calibration, This Can be Configured as Desired, but is Currently Setup for the Beanis
 #Setup Sensor Client
-client = a121.Client.open(serial_port="COM6") #Change COM Port to Match Your Local "Enhanced" Port
+client = a121.Client.open(serial_port="COM5") #Change COM Port to Match Your Local "Enhanced" Port
 
 #Define sensor configuration
 sensor_config = a121.SensorConfig()
@@ -70,14 +71,14 @@ CalibrationMaxNormalized = NormalizedCalibrationAmplitudes[CalibrationMaxIndex]
 input("Press Enter to proceed to actual scans...")
 
 #Collect 5 groups of bean scans, each averaging 10 scans
-ScanGroups = 5
+ScanGroups = 10
 BeanAmplitudeSum = np.zeros(sensor_config.num_points, dtype=np.complex128)
 
 for i in range(ScanGroups):
     print(f"Starting bean scan group {i+1}/{ScanGroups}...")
     
     client.setup_session(sensor_config)
-    BeanData = MultiScanAverage(client, sensor_config, Scans = 10)
+    BeanData = MultiScanAverage(client, sensor_config, Scans = 50)
     BeanAmplitudeSum += BeanData
     print(f"Bean scan group {i+1} complete.")
 
