@@ -4,16 +4,7 @@
 import acconeer.exptool as et
 from acconeer.exptool import a121
 import numpy as np
-import matplotlib.pyplot as plt
 import time
-import scipy.constants as sp
-
-#Constant Definitions
-epsilonnot = sp.epsilon_0  # Vacuum permittivity
-c = sp.c  # Speed of light (m/s)
-f = 60 * (10 ** 9)  # Frequency of XM125 (60 GHz)
-w = 2 * np.pi * f  # Angular frequency
-d = 0.0125  # Distance (in meters)
 
 # Function to collect and average multiple scans
 def MultiScanAverage(client, sensor_config, Scans, Delay=0.25):
@@ -49,14 +40,14 @@ sensor_config.prf = 19.5e6
 sensor_config.receiver_gain = 19
 
 #Collect Calibration Scan (10 Empty Container Scans Averaged)
-client.setup_session(sensor_config)
-print("Starting calibration scan...")
-CalibrationAmplitudes = np.abs(MultiScanAverage(client, sensor_config, Scans = 50))
-print("Calibration scan complete.")
+#client.setup_session(sensor_config)
+#print("Starting calibration scan...")
+#CalibrationAmplitudes = np.abs(MultiScanAverage(client, sensor_config, Scans = 50))
+#print("Calibration scan complete.")
 
 #Find the Maximum Calibration Amplitude
-CalibrationMaxIndex = np.argmax(CalibrationAmplitudes)
-CalibrationMaxAmplitude = CalibrationAmplitudes[CalibrationMaxIndex]
+#CalibrationMaxIndex = np.argmax(CalibrationAmplitudes)
+#CalibrationMaxAmplitude = CalibrationAmplitudes[CalibrationMaxIndex]
 
 #Wait for User to Input the Beans and Proceed
 input("Press Enter to proceed to actual scans...")
@@ -85,7 +76,7 @@ BeanAmplitudes = BeanAmplitudeSum / ScanGroups
 BeanMaxIndex = np.argmax(BeanAmplitudes)
 BeanMaxAmplitude = BeanAmplitudes[BeanMaxIndex]
 
-print(f"Average Maximum Calibration Amplitude: {CalibrationMaxAmplitude}")
+#print(f"Average Maximum Calibration Amplitude: {CalibrationMaxAmplitude}")
 print(f"Average Maximum Bean Amplitude: {BeanMaxAmplitude}")
 
 #Close the Client Session
