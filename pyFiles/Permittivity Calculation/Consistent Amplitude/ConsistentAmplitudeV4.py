@@ -63,8 +63,8 @@ for i in range(10):
         client.setup_session(sensor_config)
         BeanData = MultiScanAverage(client, sensor_config, Scans=50)
         BeanAmplitudeSum += BeanData
-        if j < ScanGroups - 1:
-            input("  Press Enter to continue to the next scan group...")
+        #if j < ScanGroups - 1:
+            #input("  Press Enter to continue to the next scan group...")
 
     # Normalize and compute BeanMaxNormalized
     BeanAmplitudes = BeanAmplitudeSum / ScanGroups
