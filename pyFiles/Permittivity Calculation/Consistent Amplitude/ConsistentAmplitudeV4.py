@@ -44,7 +44,7 @@ sensor_config.hwaas = 60
 sensor_config.profile = et.a121.Profile.PROFILE_1
 sensor_config.prf = 19.5e6
 sensor_config.receiver_gain = 19
-sensor_config.phase_enhancement = "True"
+sensor_config.phase_enhancement = True
 
 input("Press Enter to begin scans...")
 
