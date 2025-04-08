@@ -1,6 +1,6 @@
-#Chris Kane-Pardy ECE 413 COATL RADAR 3/29/2025
+# Chris Kane-Pardy ECE 413 COATL RADAR 3/29/2025
 
-#Import Acconeeer Exploration Tool as Library & Other Libraries
+# Import Acconeeer Exploration Tool as Library & Other Libraries
 import acconeer.exptool as et
 from acconeer.exptool import a121
 import numpy as np
@@ -46,6 +46,7 @@ sensor_config.hwaas = 60
 sensor_config.profile = et.a121.Profile.PROFILE_1
 sensor_config.prf = 19.5e6
 sensor_config.receiver_gain = 19
+sensor_config.phase_enhancement = "True"
 
 #Collect Calibration Scan (10 Empty Container Scans Averaged)
 #client.setup_session(sensor_config)
