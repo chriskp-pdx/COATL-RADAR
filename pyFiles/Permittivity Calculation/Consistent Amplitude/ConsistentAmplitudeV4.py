@@ -5,6 +5,7 @@ from acconeer.exptool import a121
 import numpy as np
 import time
 import csv
+import os
 
 # Function to collect and average multiple scans
 def MultiScanAverage(client, sensor_config, Scans, Delay=0.25):
@@ -80,10 +81,17 @@ client.close()
 
 # Save results to CSV
 csv_filename = "BeanMaxNormalized_Output.csv"
-with open(csv_filename, mode='w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerow(["Iteration", "BeanMaxNormalized"])
-    for idx, value in enumerate(BeanMaxNormalizedList, 1):
-        writer.writerow([idx, value])
+file_exists = os.path.isfile(csv_filename)
 
-print(f"\nAll BeanMaxNormalized values saved to {csv_filename}.")
+with open(csv_filename, mode='a', newline='') as file:
+    writer = csv.writer(file)
+
+    # Write header only if the file is new
+    if not file_exists:
+        writer.writerow(["RunID", "Iteration", "BeanMaxNormalized"])
+
+    for idx, value in enumerate(BeanMaxNormalizedList, 1):
+        writer.writerow([time.strftime("%Y%m%d-%H%M%S"), idx, value])
+
+print(f"\nAppended {len(BeanMaxNormalizedList)} BeanMaxNormalized values to {csv_filename}.")
+
