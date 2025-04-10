@@ -8,7 +8,7 @@ import csv
 import os
 
 # Function to collect and average multiple scans
-def MultiScanAverage(client, sensor_config, Scans, Delay=0.25):
+def MultiScanAverage(client, sensor_config, Scans, Delay= (100 * (10 ** (-9)))):
     total_amplitudes = np.zeros(sensor_config.num_points, dtype=np.complex128)
 
     for _ in range(Scans):
