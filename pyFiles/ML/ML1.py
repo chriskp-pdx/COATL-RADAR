@@ -15,7 +15,7 @@ class Model(nn.Module):
     # Input Layer (Bean Amplitude)
     # Hidden Layer 1 & 2 (4 Neurons)
     # Output (Bean Moisture Content (High, Medium, Low))
-    def __init__(self, in_features=120, h1=64, h2=32, out_features=3):
+    def __init__(self, in_features=1, h1=128, h2=64, out_features=3):
         super().__init__()
         self.fc1 = nn.Linear(in_features, h1)
         self.fc2 = nn.Linear(h1, h2)
@@ -34,9 +34,9 @@ torch.manual_seed(30)
 model = Model()
 
 # Load Data
-df = pd.read_csv(r"C:\Users\HP\OneDrive\Desktop\Git 4 School\COATL-RADAR\pyFiles\Dataset\BeanMaxNormalized_Output_ConstantAmplitudeV4 - ToExport.csv")
-x = df.drop(['Unnamed: 0', 'Variety'], axis=1)
-y = df['Variety']
+df = pd.read_csv(r"C:\Users\HP\OneDrive\Desktop\Git 4 School\COATL-RADAR\pyFiles\Dataset\BeanMaxNormalized_Output_ConstantAmplitudeV4 - ToExport3.csv")
+x = df.drop(['Bean Name', 'Bean Number'], axis=1)
+y = df['Bean Number']
 
 # Encode Target Labels
 label_encoder = LabelEncoder()
@@ -62,10 +62,10 @@ Y_test = torch.LongTensor(Y_test)
 criterion = nn.CrossEntropyLoss()
 
 # Choose Adam Optimizer and Learning Rate
-optimizer = torch.optim.Adam(model.parameters(), lr=0.00000001)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.000000001)
 
 # Train the Model
-epochs = 85000
+epochs = 100000
 losses = []
 for i in range(epochs):
     # Forward Pass
