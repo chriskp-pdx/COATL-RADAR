@@ -28,7 +28,7 @@ BeanName = df['Bean Name'].values.astype(np.int64)     # shape (N,), Moisture %
 
 # 5. Train / test split (80% train, 20% test)
 BeanValueTrain, BeanValueTest, BeanNameTrain, BeanNameTest = train_test_split(
-    BeanValue, BeanName, test_size=0.2, random_state=30 )
+    BeanValue, BeanName, test_size=0.2, random_state=15 )
 # The split is between data used to train the model, and data used for the model to test its accuracy
 # The random seed only determines what values will be used for each
 
@@ -40,23 +40,25 @@ BeanNameTest   = torch.from_numpy(BeanNameTest)
 
 # 7. Define the feed‑forward classifier
 class Model(nn.Module):
-    def __init__(self, in_features=1, h1=128, h2=64, h3=32, out_features=3):
+    def __init__(self, in_features=1, h1=256, h2=128, h3=64, h4=32, out_features=3):
         super().__init__()
         self.fc1 = nn.Linear(in_features, h1)
         self.fc2 = nn.Linear(h1, h2)
         self.fc3 = nn.Linear(h2,h3)
-        self.out = nn.Linear(h3, out_features)
+        self.fc4 = nn.Linear(h3,h4)
+        self.out = nn.Linear(h4, out_features)
     def forward(self, x):
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
+        x = F.relu(self.fc4(x))
         return self.out(x)
 
 # 8. Instantiate model, loss, optimizer
 torch.manual_seed(30)
 model = Model()
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-6)
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-5)
 
 # 9. Training loop
 epochs = 50000
