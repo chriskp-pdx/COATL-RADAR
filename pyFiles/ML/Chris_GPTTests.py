@@ -10,7 +10,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 # 1. Load Data File (File with Training Data)
-TrainingData = r"C:\Users\Chris\Desktop\Git4School\COATL-RADAR\pyFiles\Dataset\BS Sheet - ToExport4.csv"
+TrainingData = r"C:\Users\Chris\Desktop\Git4School\COATL-RADAR\pyFiles\Dataset\BeanMaxNormalized_Output_ConstantAmplitudeV4 - ToExport4.csv"
 df = pd.read_csv(TrainingData)
 
 # 2. Map Bean Names → Percent Value for Clarity
@@ -40,18 +40,20 @@ BeanNameTest   = torch.from_numpy(BeanNameTest)
 
 # 7. Define the feed‑forward classifier
 class Model(nn.Module):
-    def __init__(self, in_features=1, h1=256, h2=128, h3=64, h4=32, out_features=3):
+    def __init__(self, in_features=1, h1=512, h2=256, h3=128, h4=64, h5=32, out_features=3):
         super().__init__()
         self.fc1 = nn.Linear(in_features, h1)
         self.fc2 = nn.Linear(h1, h2)
         self.fc3 = nn.Linear(h2,h3)
         self.fc4 = nn.Linear(h3,h4)
-        self.out = nn.Linear(h4, out_features)
+        self.fc5 = nn.Linear(h4,h5)
+        self.out = nn.Linear(h5, out_features)
     def forward(self, x):
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
         x = F.relu(self.fc4(x))
+        x = F.relu(self.fc5(x))
         return self.out(x)
 
 # 8. Instantiate model, loss, optimizer
