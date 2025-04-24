@@ -10,7 +10,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 # 1. Load Data File (File with Training Data)
-TrainingData = r"C:\Users\Chris\Desktop\Git4School\COATL-RADAR\pyFiles\Dataset\BeanMaxNormalized_Output_ConstantAmplitudeV4 - ToExport4.csv"
+TrainingData = r"C:\Users\Chris\Desktop\Git4School\COATL-RADAR\pyFiles\Dataset\MedBeanis_Testing V2 - BEANSV.csv"
 df = pd.read_csv(TrainingData)
 
 # 2. Map Bean Names → Percent Value for Clarity
@@ -19,7 +19,8 @@ InverseIndex = {v: k for k, v in Index.items()}
 df['Bean Name'] = df['Bean Name'].map(Index)
 
 # 3. Feature / target split
-BeanValue = df[['Bean Value']].values.astype(np.float32)  # shape (N,1), Bean Amplitude Values
+df = df.drop(columns=["Scan_Group"])
+BeanValue = df[[f"Point_{i}" for i in range(50)]].values.astype(np.float32)
 BeanName = df['Bean Name'].values.astype(np.int64)     # shape (N,), Moisture %
 
 # 4. (Optional) Label encoding for convenience
@@ -40,7 +41,7 @@ BeanNameTest   = torch.from_numpy(BeanNameTest)
 
 # 7. Define the feed‑forward classifier
 class Model(nn.Module):
-    def __init__(self, in_features=1, h1=512, h2=256, h3=128, h4=64, h5=32, out_features=3):
+    def __init__(self, in_features=50, h1=512, h2=256, h3=128, h4=64, h5=32, out_features=3):
         super().__init__()
         self.fc1 = nn.Linear(in_features, h1)
         self.fc2 = nn.Linear(h1, h2)

@@ -97,7 +97,7 @@ def SaveToCSV(filename, groups, labelPrefix, meanLabel):
         writer.writerow([meanLabel] + Profile.tolist())
 
 # Save both parts
-SaveToCSV("BeanDataReal.csv", RealBeanArray, "Real", "Amplitude")
-SaveToCSV("BeanDataImaginary.csv", ImaginaryBeanArray, "Imaginary", "Amplitude")
+SaveToCSV("BeanDataReal.csv", RealBeanArray, "Real")
+SaveToCSV("BeanDataImaginary.csv", ImaginaryBeanArray, "Imaginary")
 
 print("Real and imaginary calibration differences saved to CSV.")
