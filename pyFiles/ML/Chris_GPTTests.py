@@ -61,10 +61,10 @@ class Model(nn.Module):
 torch.manual_seed(30)
 model = Model()
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-5)
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
 
 # 9. Training loop
-epochs = 50000
+epochs = 25000
 losses = []
 for epoch in range(epochs):
     logits = model(BeanValueTrain)
@@ -102,8 +102,7 @@ def predict_bean(bean_value: float) -> str:
 
 # 13. Interactive REPL for predictions
 if __name__ == "__main__":
-    print("=== Bean Classifier REPL ===")
-    print("Enter a bean value (300–8000) to predict its origin, or 'q' to quit.")
+    print("Enter a bean value to predict its origin, or 'q' to quit.")
     while True:
         s = input("Bean Value ▶ ").strip()
         if s.lower() in ('q', 'quit', 'exit'):
@@ -114,8 +113,6 @@ if __name__ == "__main__":
         except ValueError:
             print("  ✗ Invalid number, try again.")
             continue
-        if not (300 <= val <= 8000):
-            print("  ⚠️  Value outside 300–8000 range. Predicting anyway...")
         pred_name = predict_bean(val)
         print(f"  ✓ Predicted Bean Name: {pred_name}\n")
 
