@@ -10,7 +10,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 # 1. Load Data File (File with Training Data)
-TrainingData = r"C:\Users\henry\OneDrive\Desktop\PSU\Winter 24-25\ECE 412_413 - Senior Project Development\COATL-RADAR\pyFiles\Dataset\BeanMaxNormalized_Output_ConstantAmplitudeV4 - ToExport4.csv"
+TrainingData = r"C:\Users\henry\OneDrive\Desktop\PSU\Winter 24-25\ECE 412_413 - Senior Project Development\COATL-RADAR\pyFiles\Datasets\MedBeanis_Testing V2 - BEANSV.csv"
 df = pd.read_csv(TrainingData)
 
 # 2. Map Bean Names → Percent Value for Clarity
@@ -19,7 +19,8 @@ InverseIndex = {v: k for k, v in Index.items()}
 df['Bean Name'] = df['Bean Name'].map(Index)
 
 # 3. Feature / target split
-BeanValue = df[['Bean Value']].values.astype(np.float32)  # shape (N,1), Bean Amplitude Values
+df = df.drop(columns=["Scan_Group"])
+BeanValue = df[[f"Point_{i}" for i in range(50)]].values.astype(np.float32)
 BeanName = df['Bean Name'].values.astype(np.int64)     # shape (N,), Moisture %
 
 # 4. (Optional) Label encoding for convenience
@@ -28,7 +29,7 @@ BeanName = df['Bean Name'].values.astype(np.int64)     # shape (N,), Moisture %
 
 # 5. Train / test split (80% train, 20% test)
 BeanValueTrain, BeanValueTest, BeanNameTrain, BeanNameTest = train_test_split(
-    BeanValue, BeanName, test_size=0.2, random_state=15 )
+    BeanValue, BeanName, test_size=0.2, random_state=12 )
 # The split is between data used to train the model, and data used for the model to test its accuracy
 # The random seed only determines what values will be used for each
 
@@ -40,7 +41,7 @@ BeanNameTest   = torch.from_numpy(BeanNameTest)
 
 # 7. Define the feed‑forward classifier
 class Model(nn.Module):
-    def __init__(self, in_features=1, h1=512, h2=256, h3=128, h4=64, h5=32, out_features=3):
+    def __init__(self, in_features=50, h1=512, h2=256, h3=128, h4=64, h5=32, out_features=3):
         super().__init__()
         self.fc1 = nn.Linear(in_features, h1)
         self.fc2 = nn.Linear(h1, h2)
@@ -60,10 +61,10 @@ class Model(nn.Module):
 torch.manual_seed(30)
 model = Model()
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-5)
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
 
 # 9. Training loop
-epochs = 50000
+epochs = 2000
 losses = []
 for epoch in range(epochs):
     logits = model(BeanValueTrain)
@@ -101,8 +102,7 @@ def predict_bean(bean_value: float) -> str:
 
 # 13. Interactive REPL for predictions
 if __name__ == "__main__":
-    print("=== Bean Classifier REPL ===")
-    print("Enter a bean value (300–8000) to predict its origin, or 'q' to quit.")
+    print("Enter a bean value to predict its origin, or 'q' to quit.")
     while True:
         s = input("Bean Value ▶ ").strip()
         if s.lower() in ('q', 'quit', 'exit'):
@@ -113,7 +113,6 @@ if __name__ == "__main__":
         except ValueError:
             print("  ✗ Invalid number, try again.")
             continue
-        if not (300 <= val <= 8000):
-            print("  ⚠️  Value outside 300–8000 range. Predicting anyway...")
         pred_name = predict_bean(val)
         print(f"  ✓ Predicted Bean Name: {pred_name}\n")
+
