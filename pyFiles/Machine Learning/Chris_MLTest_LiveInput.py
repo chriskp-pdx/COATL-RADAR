@@ -60,10 +60,10 @@ class Model(nn.Module):
 torch.manual_seed(30)
 model = Model()
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-8)
 
 # 9. Training loop
-epochs = 25000
+epochs = 40000
 losses = []
 for epoch in range(epochs):
     logits = model(BeanValueTrain)
@@ -72,8 +72,8 @@ for epoch in range(epochs):
     loss.backward()
     optimizer.step()
     losses.append(loss.item())
-    if epoch % 500 == 0:
-        print(f"Epoch {epoch:5d}  Loss: {loss.item():.4f}")
+    if epoch % 100 == 0:
+        print(f"Epoch {epoch:5d}  Loss: {loss.item():.8f}")
 
 # 10. Plot training loss curve
 plt.plot(losses)
@@ -116,10 +116,11 @@ def run_single_group_scan(serial_port="COM5"):
     sensor_config.start_point = 40
     sensor_config.num_points = 50
     sensor_config.sweeps_per_frame = 1
-    sensor_config.hwaas = 60
+    sensor_config.hwaas = 500
     sensor_config.profile = et.a121.Profile.PROFILE_1
     sensor_config.prf = 19.5e6
     sensor_config.receiver_gain = 19
+    sensor_config.phase_enhancement = True
 
     # Calibration scan
     client.setup_session(sensor_config)
@@ -141,6 +142,7 @@ def run_single_group_scan(serial_port="COM5"):
     diff = CalibrationAmplitudes - BeanData
     real_part = np.real(diff)
     imag_part = np.imag(diff)
+    combined = np.zeros
     combined = np.hstack((real_part, imag_part)).astype(np.float32)
     return combined
 
@@ -158,7 +160,7 @@ if __name__ == "__main__":
     print("Bean Scanner Ready! Press Enter to scan, or type 'q' to quit.\n")
     
     while True:
-        s = input("▶ ").strip()
+        s = input("▶ Please Empty Your Device for a Calibration Scan, and Press Enter").strip()
         if s.lower() in ('q', 'quit', 'exit'):
             print("Exiting. Goodbye!")
             break
