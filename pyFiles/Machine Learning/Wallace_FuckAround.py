@@ -63,7 +63,7 @@ criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-8)
 
 # 9. Training loop
-epochs = 50000
+epochs = 65000
 losses = []
 for epoch in range(epochs):
     logits = model(BeanValueTrain)

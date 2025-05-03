@@ -40,7 +40,7 @@ BeanNameTest   = torch.from_numpy(BeanNameTest)
 
 # 7. Define the feed‑forward classifier
 class Model(nn.Module):
-    def __init__(self, in_features=100, h1=512, h2=256, h3=128, h4=64, h5=32, out_features=3):
+    def __init__(self, in_features=100, h1=256, h2=128, h3=64, h4=32, h5=16, out_features=3):
         super().__init__()
         self.fc1 = nn.Linear(in_features, h1)
         self.fc2 = nn.Linear(h1, h2)
@@ -60,7 +60,7 @@ class Model(nn.Module):
 torch.manual_seed(30)
 model = Model()
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-8)
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-6)
 
 # 9. Training loop
 epochs = 50000
