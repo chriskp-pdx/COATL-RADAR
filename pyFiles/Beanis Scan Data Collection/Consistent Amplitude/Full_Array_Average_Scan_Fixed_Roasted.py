@@ -30,13 +30,13 @@ client = a121.Client.open(serial_port="COM4") #Change COM Port to Match Your Loc
 # Define sensor configuration
 sensor_config = a121.SensorConfig()
 sensor_config.step_length = 1
-sensor_config.start_point = 40   
-sensor_config.num_points = 50
+sensor_config.start_point = 80   
+sensor_config.num_points = 250
 sensor_config.sweeps_per_frame = 1
-sensor_config.hwaas = 500
+sensor_config.hwaas = 25
 sensor_config.profile = et.a121.Profile.PROFILE_1
-sensor_config.prf = 19.5e6
-sensor_config.receiver_gain = 19
+sensor_config.prf = 15.6e6
+sensor_config.receiver_gain = 12
 sensor_config.phase_enhancement = True
 
 #Collect Calibration Scan (10 Empty Container Scans Averaged)
