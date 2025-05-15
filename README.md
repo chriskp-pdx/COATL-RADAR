@@ -123,11 +123,11 @@ Testing Results Utilizing Large Aluminum Test Device
 Testing Results Utilizing Thin Aluminum Test Device
 
 # 3D Modeling
-## V1.1
+### V1.1
 Contains Original 3D Printed "Spider" Prototype for Testing Rotation
-## V1.2
+### V1.2
 Contains Modified 3D Printed "Spider" Prototype with Updates
-## V2.1
+### V2.1
 Contains "Christmas Tree Stand" to Hold Metal Tube Flush w/ Lens for Shielding and 0 Intereference
 
 # Assigments:
