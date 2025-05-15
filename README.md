@@ -15,6 +15,54 @@ Wallace Mckenzie
 
 # Software:
 
+## A121 Binary File
+
+Acconeer Provided File for Flashing Firmware to New XE125 EVK Radar Module
+
+## A121 Exploration Tool Connection
+
+Initial Test Programs to Interface with Acconeer A121 Exploration Tool Through Python
+
+## Data Collection
+
+### Consistency Testing
+
+After Deciding Against Calculating Permittivity, We Created These Programs, Which Attempted to Mitigate Inconsistencies in Results due to Bean Geometries
+
+### Datasets
+
+Collected Datasets for Use in Machine Learning
+
+### Permittivity Calculations
+
+Original Test Programs, Which Aimed to Determined Moisture Content by First Calculating Permittivity from Acconeer "IQ" Data
+
+### FullAverageScan (Green Coffee)
+
+Final Program Version Which Utilizes Several Averages and Captures the Entire Waveform of the IQ Data Scan
+
+### FullAverageScan (Roasted Coffee)
+
+Final Program Version With Modified Settings Aimed at using Ground Roasted Coffee
+
+## Machine Learning
+
+### Preliminary Testing
+
+Original Exploratory Machine Learning Programs
+
+### Experimentation Variants
+
+3 Separate Versions of the Base Machine Learning Program (Chris, Kamal, & Henry), Which We Used to Test and Compare Accuracy Across Different Settings
+
+### Final Machine Learning Program with Live Testing
+
+The Final Version of Our Machine Learning Program
+
+## Stepper Motor
+
+Outdated Programs for Interfacing ESP32 to Stepper Motor Using I2C for Bean Rotation
+
 # Documentation:
 ## Acconeer Documentation
 
