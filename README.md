@@ -10,22 +10,20 @@ Henry Sanders
 
 Wallace Mckenzie
 
-## pyFiles:
+## Software:
 
-Contains all .py files used throughout the testing and development of our product
 
-## 3D Modeling:
 
-Contains all revisions of our design in Fusion360
+## Assigments:
 
-## Assignments:
-
-Contains all class mandated work, including the team contract and product design documentation
 
 ## Documentation:
 
-All reasearch articles and supporting materials, both from the internet, and created by us
 
-## Software:
-
-Contains the .bin file used to flas the XE125 EVK
+## 3D Modeling
+### V1.1
+Contains Original 3D Printed "Spider" Prototype for Testing Rotation
+### V1.2
+Contains Modified 3D Printed "Spider" Prototype with Updates
+### V2.1
+Contains "Christmas Tree Stand" to Hold Metal Tube Flush w/ Lens for Shielding and 0 Intereference
