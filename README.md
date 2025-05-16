@@ -1,7 +1,10 @@
 # COATL-RADAR
-2025 ECE 412/413 COATL RADAR PROJECT
 
-## Team:
+2025 ECE 412/413 COATL-RADAR PROJECT
+
+Green Coffee Bean Moisture Content Detection Using 60GHz Radar Module
+
+# Team:
 Chris Kane-Pardy
 
 Kamal Smith
@@ -10,22 +13,122 @@ Henry Sanders
 
 Wallace Mckenzie
 
-## pyFiles:
+# Software:
 
-Contains all .py files used throughout the testing and development of our product
+## A121 Binary File
 
-## 3D Modeling:
+Acconeer Provided File for Flashing Firmware to New XE125 EVK Radar Module
 
-Contains all revisions of our design in Fusion360
+## A121 Exploration Tool Connection
 
-## Assignments:
+Initial Test Programs to Interface with Acconeer A121 Exploration Tool Through Python
 
-Contains all class mandated work, including the team contract and product design documentation
+## Data Collection
 
-## Documentation:
+### Consistency Testing
 
-All reasearch articles and supporting materials, both from the internet, and created by us
+After Deciding Against Calculating Permittivity, We Created These Programs, Which Attempted to Mitigate Inconsistencies in Results due to Bean Geometries
 
-## Software:
+### Datasets
 
-Contains the .bin file used to flas the XE125 EVK
+Collected Datasets for Use in Machine Learning
+
+### Permittivity Calculations
+
+Original Test Programs, Which Aimed to Determined Moisture Content by First Calculating Permittivity from Acconeer "IQ" Data
+
+### FullAverageScan (Green Coffee)
+
+Final Program Version Which Utilizes Several Averages and Captures the Entire Waveform of the IQ Data Scan
+
+### FullAverageScan (Roasted Coffee)
+
+Final Program Version With Modified Settings Aimed at using Ground Roasted Coffee
+
+## Machine Learning
+
+### Preliminary Testing
+
+Original Exploratory Machine Learning Programs
+
+### Experimentation Variants
+
+3 Separate Versions of the Base Machine Learning Program (Chris, Kamal, & Henry), Which We Used to Test and Compare Accuracy Across Different Settings
+
+### Final Machine Learning Program with Live Testing
+
+The Final Version of Our Machine Learning Program
+
+## Stepper Motor
+
+Outdated Programs for Interfacing ESP32 to Stepper Motor Using I2C for Bean Rotation
+
+# Documentation:
+## Acconeer Documentation
+
+-Acconeer A121 Radar Datasheets
+
+-Acconeer XE125 EVK User Guides
+
+-Acconeer Exploration Tool Documentation
+
+-Acconeer Lens Kit Documentation & Data Sheet
+
+## Administrative (Team Organization)
+
+-Weekly Progress Reports
+
+-Team Meeting Notes
+
+## Datasheets
+
+Miscellaneous Datasheets from Abandoned Components
+
+## Research Documents
+
+### COATL-RADAR Research Documentation
+
+Documents Compiled by the Team Throughout Our Process Which We've Deemed Useful Starting Points
+
+### Machine Learning Research (Mark Martin)
+
+Brief Introduction to Machine Learning Provided by Our Wonderful Industry Sponsor (Dr. Mark Martin)
+
+### Optics Research
+
+Documents Focusing on the use of Lenses in Radar Applications (Brief Research from Wallace)
+
+### Research Articles (Dr. Joshua Mendez)
+
+Contains Research Papers Provided by Our Industry Sponsor (Dr. Joshua Mendez)
+
+## Test Documentation
+
+Test Results, Intermediate Procedures, and Various Methods We Attempted Throughout the Course of the Project
+
+### 3D Printed Prototype
+
+Testing Results Utilizing PETG/PLA 3D Printed Test Device
+
+### Medium Metal Device Testing
+
+Testing Results Utilizing Medium-Sized Aluminum Test Device
+
+### Metal Device Testing
+
+Testing Results Utilizing Large Aluminum Test Device
+
+### Thin Metal Device Testing
+
+Testing Results Utilizing Thin Aluminum Test Device
+
+# 3D Modeling
+### V1.1
+Contains Original 3D Printed "Spider" Prototype for Testing Rotation
+### V1.2
+Contains Modified 3D Printed "Spider" Prototype with Updates
+### V2.1
+Contains "Christmas Tree Stand" to Hold Metal Tube Flush w/ Lens for Shielding and 0 Intereference
+
+# Assigments:
+Contains All Course Deliverables
