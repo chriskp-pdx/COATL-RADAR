@@ -13,7 +13,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 # 1. Load Data File (File with Training Data)
-TrainingData = r"C:\Users\HP\OneDrive\Desktop\Git 4 School\COATL-RADAR\pyFiles\Datasets\MedBeanis_Testing V2 - BEANSV2.csv"
+TrainingData = r"C:\Users\HP\OneDrive\Desktop\Git 4 School\COATL-RADAR\pyFiles\Datasets\CombinedBeanDataAll3.csv"
 df = pd.read_csv(TrainingData)
 
 # 2. Map Bean Names → Percent Value for Clarity
@@ -57,13 +57,13 @@ class Model(nn.Module):
         return self.out(x)
 
 # 8. Instantiate model, loss, optimizer
-torch.manual_seed(30)
+torch.manual_seed(29)
 model = Model()
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-6)
 
 # 9. Training loop
-epochs = 50000
+epochs = 1250
 losses = []
 for epoch in range(epochs):
     logits = model(BeanValueTrain)
@@ -106,7 +106,7 @@ def MultiScanAverage(client, sensor_config, Scans, Delay=0.0005):
     
     return total_amplitudes / Scans
 
-def run_single_group_scan(serial_port="COM5"):
+def run_single_group_scan(serial_port="COM8"):
     # Setup sensor client
     client = a121.Client.open(serial_port=serial_port)
 
@@ -122,7 +122,7 @@ def run_single_group_scan(serial_port="COM5"):
     sensor_config.receiver_gain = 19
     sensor_config.phase_enhancement = True
 
-    # Calibration scan
+    # Collect calibration scan
     client.setup_session(sensor_config)
     print("Starting calibration scan...")
     CalibrationAmplitudes = MultiScanAverage(client, sensor_config, Scans=50)
@@ -130,20 +130,30 @@ def run_single_group_scan(serial_port="COM5"):
 
     input("Insert beans and press Enter to continue...")
 
-    # Bean scan (1 group of 50 scans)
-    print("Starting bean scan group...")
-    client.setup_session(sensor_config)
-    BeanData = MultiScanAverage(client, sensor_config, Scans=50)
-    print("Bean scan complete.")
+    # Collect 5 groups of scans, each with 50 scans averaged
+    ScanGroups = 10
+    BeanAmplitudeSum = np.zeros(sensor_config.num_points, dtype=np.complex128)
+
+    for i in range(ScanGroups):
+        print(f"Starting bean scan group {i+1}/{ScanGroups}...")
+        client.setup_session(sensor_config)
+        BeanData = MultiScanAverage(client, sensor_config, Scans=50)
+        BeanAmplitudeSum += BeanData
+        print(f"Bean scan group {i+1} complete.")
+
+        if i < ScanGroups - 1:
+            input("Press Enter to continue to the next scan group...")
+
+    # Final averaged data
+    BeanAmplitudes = BeanAmplitudeSum / ScanGroups
+    FinalBeanAverage = CalibrationAmplitudes - BeanAmplitudes
+
+    # Format as 1×100 feature vector (real + imag)
+    real_part = np.real(FinalBeanAverage)
+    imag_part = np.imag(FinalBeanAverage)
+    combined = np.hstack((real_part, imag_part)).astype(np.float32)
 
     client.close()
-
-    # Real + Imag → 1x100 vector
-    diff = CalibrationAmplitudes - BeanData
-    real_part = np.real(diff)
-    imag_part = np.imag(diff)
-    combined = np.zeros
-    combined = np.hstack((real_part, imag_part)).astype(np.float32)
     return combined
 
 # 12. Prediction helper
