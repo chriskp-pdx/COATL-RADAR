@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Read CSV
-df = pd.read_csv(r'C:\Users\Chris\Desktop\Git4School\COATL-RADAR\Software\Data Collection\Datasets\Comparison Graph Data.csv')
+df = pd.read_csv(r'C:\Users\Chris\Desktop\Spring 2025\Git4School\COATL-RADAR\Software\Data Collection\Datasets\Comparison Graph Data.csv')
 
 # Filter real and imaginary values
 yemenRealAmp = df["Average"].iloc[0:49]
